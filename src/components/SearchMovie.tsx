@@ -37,7 +37,7 @@ export default function SearchMovie(movie: MoviePartial) {
         />
         <button
           type="submit"
-          className="p-5 bg-[url('/search.svg')] bg-no-repeat text-transparent"
+          className="p-5 bg-[url('/search.svg')] bg-no-repeat text-transparent dark:invert"
         ></button>
       </form>
       {searching ? <MovieShow props={props} /> : null}

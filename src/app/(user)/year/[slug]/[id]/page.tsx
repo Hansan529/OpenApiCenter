@@ -24,7 +24,7 @@ export default function Page({ params }: Params) {
     <>
       <div
         key={movie.title}
-        className="p-[20px] prose dark:prose-invert prose-li:list-none bg-gray-300 mx-auto"
+        className="p-[20px] prose dark:prose-invert prose-li:list-none bg-gray-300 dark:bg-gray-700 mx-auto"
       >
         <h2 className="mb-4 text-2xl font-bold break-keep overflow-hidden overflow-ellipsis whitespace-nowrap">
           {movie.title
@@ -81,32 +81,37 @@ export default function Page({ params }: Params) {
         <h2>스태프</h2>
         <div className="grid grid-cols-4">
           {movie.staffs?.staff.map((el, key) => (
-            <div key={key} className="mb-5">
+            <div
+              key={key}
+              className="mb-5 text-ellipsis overflow-hidden whitespace-nowrap"
+            >
               <span className="block">{el.staffRoleGroup}</span>
-              <span className="text-ellipsis overflow-hidden whitespace-nowrap">
-                {el.staffNm}
-              </span>
+              <span>{el.staffNm}</span>
             </div>
           ))}
         </div>
-        <h2>줄거리</h2>
-        <details>
-          <summary>세부 정보</summary>
-          <div className="space-y-[20px]">
-            {movie.plots?.plot.map((el, key) => (
-              <p className="break-keep" key={key}>
-                {el.plotText}
-              </p>
-            ))}
-          </div>
-        </details>
+        {movie.plots?.plot[0]?.plotText !== '' ? (
+          <>
+            <h2>줄거리</h2>
+            <details>
+              <summary>세부 정보</summary>
+              <div className="space-y-[20px]">
+                {movie.plots?.plot.map((el, key) => (
+                  <p className="break-keep" key={key}>
+                    {el.plotText}
+                  </p>
+                ))}
+              </div>
+            </details>
+          </>
+        ) : null}
         <div>
           {movie.vods?.vod.map((el, key) =>
-            el.vodUrl.length !== 0 ? (
+            el.vodUrl?.length !== 0 ? (
               <video key={key} controls={true} crossOrigin="anonymous">
                 <source
                   src={`https://www.kmdb.or.kr/trailer/play/${el.vodUrl
-                    .slice(el.vodUrl.indexOf('FileNm='))
+                    ?.slice(el.vodUrl?.indexOf('FileNm='))
                     .replace('FileNm=', '')}`}
                 />
                 <p>Video 태그를 지원하지 않는 브라우저입니다</p>

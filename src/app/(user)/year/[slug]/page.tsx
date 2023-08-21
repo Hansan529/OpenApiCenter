@@ -9,8 +9,7 @@ export type Slug = {
 
 const fetchMovie = async (createDts: string, listCount: string) => {
   const res = await fetch(
-    `http://localhost:3000/api?createDts=${createDts}&listCount=${listCount}`,
-    { cache: 'no-cache' }
+    `http://localhost:3000/api?createDts=${createDts}&listCount=${listCount}`
   );
   return res.json();
 };
@@ -44,12 +43,12 @@ export interface Movie {
   };
   plots: {
     plot: {
-      plotText: string;
+      plotText: string | undefined;
     }[];
   };
   vods: {
     vod: {
-      vodUrl: string;
+      vodUrl: string | undefined;
     }[];
   };
 }
@@ -66,5 +65,10 @@ export default async function Page({ params }: Slug) {
       el.genre?.length !== 0
     );
   });
-  return <MovieShow props={filterList} />;
+  return (
+    <>
+      <h2 className="text-right p-5">2023.08.21 기준</h2>
+      <MovieShow props={filterList} />
+    </>
+  );
 }

@@ -41,8 +41,8 @@ export default function MovieShow({ props }: ChildComponentProps) {
     router.push(link);
   };
   return (
-    <article className="container mx-auto absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-300 dark:bg-gray-700">
-      <div className="prose-xl md:grid md:grid-cols-4 place-content-center bg-gray-300 text-black dark:text-white text-center divide-x-2 divide-y-2">
+    <article className="container mx-auto absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-300 dark:bg-gray-700 rounded-xl text-center">
+      <div className="prose-xl md:grid md:grid-cols-4 place-content-center">
         {result.map((movie: MoviePartial, index: number) => (
           <div
             key={movie.title}
@@ -75,7 +75,7 @@ export default function MovieShow({ props }: ChildComponentProps) {
                   height={300}
                 />
               ) : (
-                <div className="mx-auto w-[200px] h-[300px] leading-[300px] bg-gray-200">
+                <div className="mx-auto w-[200px] h-[300px] leading-[300px] bg-gray-200 text-black">
                   포스터 정보 없음
                 </div>
               )}
