@@ -2,7 +2,7 @@ import { SystemError } from '@/type';
 import { NextRequest, NextResponse } from 'next/server';
 import mysql from 'mysql2/promise';
 
-export const config = {
+const config = {
   host: 'localhost',
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -17,7 +17,7 @@ type movieObject = {
 export async function GET(req: NextRequest) {
   const createDts = req.nextUrl.searchParams.get('createDts');
   const listCount = req.nextUrl.searchParams.get('listCount');
-  const dbconnection = await mysql.createConnection(config);
+  const dbconnection: any = await mysql.createConnection(config);
   try {
     const query = 'SELECT COUNT(*) FROM movie';
     const value: string[] = [];
@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
       INSERT INTO movie(
         title, titleEng, titleOrg, prodYear , nation, company, runtime, rating, genre, releaseDate, posterUrl, stillUrl, directors, actors, staffs, plots, vods
         ) values (
-          '${movie.title.replace(/'/g, '/\\/')}', 
+          '${movie.title.replace(/'/g, '/\\/').trim()}', 
           '${movie.titleEng.replace(/'/g, '/\\/')}', 
           '${movie.titleOrg.replace(/'/g, '/\\/')}', 
           '${movie.prodYear.replace(/'/g, '/\\/')}', 
@@ -72,7 +72,4 @@ export async function GET(req: NextRequest) {
     console.log(err);
     return NextResponse.json({ error: err.message });
   }
-  //   console.log('res: ', res);
 }
-
-// createDts=2023&collection=kmdb_new2&detail=N&listCount=500&ServiceKey=33NQA625UX17J2C52B74
