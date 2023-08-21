@@ -19,46 +19,51 @@ export async function GET(req: NextRequest) {
   const listCount = req.nextUrl.searchParams.get('listCount');
   const dbconnection = await mysql.createConnection(config);
   try {
-    const query = 'SELECT * FROM movie';
+    const query = 'SELECT COUNT(*) FROM movie';
     const value: string[] = [];
     const [results] = await dbconnection.execute(query, value);
-    if (Object.keys(results).length !== 0) {
+    if (Object.values(results[0])[0] === 1123) {
+      const [results] = await dbconnection.execute(
+        `SELECT * FROM movie`,
+        value
+      );
       return NextResponse.json(results);
     }
 
     const { Data } = await fetch(
-      `${process.env.API_URL}?ServiceKey=${process.env.API_KEY}&createDts=${createDts}&listCount=${listCount}&collection=kmdb_new2&detail=Y`
+      `${process.env.API_URL}?ServiceKey=${process.env.API_KEY}&createDts=${createDts}&listCount=${listCount}&collection=kmdb_new2&detail=Y&startCount=1124`
     ).then((res) => res.json());
     const result = Data[0].Result;
     result.map(async (movie: any) => {
       const insertQuery = `
       INSERT INTO movie(
-        title, titleEng, titleOrg, nation, company, runtime, rating, genre, releaseDate, posterUrl, stillUrl, directors, actors, staffs, plots, vods
+        title, titleEng, titleOrg, prodYear , nation, company, runtime, rating, genre, releaseDate, posterUrl, stillUrl, directors, actors, staffs, plots, vods
         ) values (
-        '${movie.title.replace(/'/g, '/\\/')}', 
-        '${movie.titleEng.replace(/'/g, '/\\/')}', 
-        '${movie.titleOrg.replace(/'/g, '/\\/')}', 
-        '${movie.nation.replace(/'/g, '/\\/')}', 
-        '${movie.company.replace(/'/g, '/\\/')}', 
-        '${movie.runtime.replace(/'/g, '/\\/')}', 
-        '${movie.rating.replace(/'/g, '/\\/')}',
-        '${movie.genre.replace(/'/g, '/\\/')}', 
-        '${movie.ratings.rating[0].releaseDate.replace(/'/g, '/\\/')}', 
-        '${movie.posters.replace(/'/g, '/\\/')}', 
-        '${movie.stlls.replace(/'/g, '/\\/')}', 
-        '${JSON.stringify(movie.directors.director).replace(/'/g, "\\'")}', 
-        '${JSON.stringify(movie.actors.actor).replace(
-          /'/g,
-          "\\'"
-        )}', '${JSON.stringify(movie.staffs.staff).replace(
+          '${movie.title.replace(/'/g, '/\\/')}', 
+          '${movie.titleEng.replace(/'/g, '/\\/')}', 
+          '${movie.titleOrg.replace(/'/g, '/\\/')}', 
+          '${movie.prodYear.replace(/'/g, '/\\/')}', 
+          '${movie.nation.replace(/'/g, '/\\/')}', 
+          '${movie.company.replace(/'/g, '/\\/')}', 
+          '${movie.runtime.replace(/'/g, '/\\/')}', 
+          '${movie.rating.replace(/'/g, '/\\/')}',
+          '${movie.genre.replace(/'/g, '/\\/')}', 
+          '${movie.ratings.rating[0].releaseDate.replace(/'/g, '/\\/')}', 
+          '${movie.posters.replace(/'/g, '/\\/')}', 
+          '${movie.stlls.replace(/'/g, '/\\/')}', 
+          '${JSON.stringify(movie.directors.director).replace(/'/g, "\\'")}', 
+          '${JSON.stringify(movie.actors.actor).replace(
+            /'/g,
+            "\\'"
+          )}', '${JSON.stringify(movie.staffs.staff).replace(
         /'/g,
         "\\'"
       )}', '${JSON.stringify(movie.plots.plot).replace(
         /'/g,
         "\\'"
       )}', '${JSON.stringify(movie.vods.vod).replace(/'/g, "\\'")}'
-        )`;
-      const [roes, fields] = await dbconnection.query(insertQuery);
+          )`;
+      const [err, roes, fields] = await dbconnection.query(insertQuery);
     });
     dbconnection.end();
     return NextResponse.json(result);
