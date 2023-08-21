@@ -15,6 +15,13 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
-}
+  corePlugins: {
+    aspectRatio: false,
+  },
+  important: true,
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
+  ],
+};
 export default config
