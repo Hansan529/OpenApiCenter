@@ -3,9 +3,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import ThemeProvider from './Provider';
-const inter = Inter({ subsets: ['latin'] });
-
-
+import ReduxProvider from '../redux/providers';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -19,11 +17,13 @@ export type Props = {
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <ThemeProvider>
-          <Header />
-          {children}
-        </ThemeProvider>
+      <body>
+        <ReduxProvider>
+          <ThemeProvider>
+            <Header />
+            {children}
+          </ThemeProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

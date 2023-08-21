@@ -8,10 +8,13 @@ import Link from 'next/link';
 import DetailPage from './DetailPage';
 import { useDispatch } from 'react-redux';
 import { data } from '@/redux/feature/dataSlicce';
+import { useRouter } from 'next/navigation';
 
 interface ChildComponentProps {
   props: MoviePartial[];
 }
+
+type MouseEventType = React.MouseEvent<HTMLAnchorElement>;
 
 export default function MovieShow({ props }: ChildComponentProps) {
   const totalPost = Object.keys(props).length;
@@ -19,8 +22,9 @@ export default function MovieShow({ props }: ChildComponentProps) {
   const [page, setPage] = useState<number>(1);
   const result = props.slice(page * limit, (page + 1) * limit);
   const dispatch = useDispatch();
+  const router = useRouter();
 
-  const detailPageProps = (e) => {
+  const detailPageProps = (e: MouseEventType) => {
     e.preventDefault();
     const link = decodeURIComponent(e.currentTarget.href);
     const titleNameIndex = link.lastIndexOf('/') + 1;
@@ -28,8 +32,8 @@ export default function MovieShow({ props }: ChildComponentProps) {
     const propsData = props.find((el) => {
       return el.title?.trim() == titleName;
     });
-    console.log('propsData: ', propsData);
-    // dispatch(data())
+    dispatch(data(propsData));
+    router.push(link);
   };
   return (
     <article className="md:grid md:grid-cols-4 place-content-center bg-gray-300 text-black dark:text-white text-center divide-x-2 divide-y-2">
@@ -40,10 +44,10 @@ export default function MovieShow({ props }: ChildComponentProps) {
         >
           <Link
             onClick={detailPageProps}
-            href={`/${movie.prodYear}/${movie.title?.trim() as string}`}
+            href={`/year/${movie.prodYear}/${movie.title?.trim() as string}`}
           >
             <h2 className="mb-4 text-xl font-bold break-keep overflow-hidden overflow-ellipsis whitespace-nowrap">
-              {movie.title}
+              {movie.title?.trim()}
             </h2>
             {/* <div>
               제작 국가: {movie.nation !== '' ? movie.nation : '정보 없음'}
