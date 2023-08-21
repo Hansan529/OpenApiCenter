@@ -15,14 +15,16 @@ export default function MovieShow({ props }: ChildComponentProps) {
   const [page, setPage] = useState<number>(1);
   const result = props.slice(page * limit, (page + 1) * limit);
   return (
-    <article className="">
+    <article className="md:grid md:grid-cols-4 place-content-center bg-gray-300 text-black dark:text-white text-center divide-x-2 divide-y-2">
       {result.map((movie: MoviePartial, index: number) => (
         <div
           key={movie.title}
-          className="mx-auto p-[20px] bg-gray-400 border border-white"
+          className="p-[20px] flex flex-col justify-between"
         >
-          <h2>{movie.title}</h2>
-          <div>
+          <h2 className="mb-4 text-xl font-bold break-keep overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {movie.title}
+          </h2>
+          {/* <div>
             제작 국가: {movie.nation !== '' ? movie.nation : '정보 없음'}
           </div>
           <div>
@@ -38,17 +40,22 @@ export default function MovieShow({ props }: ChildComponentProps) {
           <div>주제: {movie.genre !== '' ? movie.genre : '정보 없음'}</div>
           <div>
             개봉일: {movie.releaseDate !== '' ? movie.releaseDate : '정보 없음'}
-          </div>
+          </div> */}
           {typeof movie.posterUrl === 'string' &&
           movie.posterUrl.length !== 0 ? (
             <Image
+              className="mx-auto w-[200px] h-[300px] object-cover"
               src={movie.posterUrl.split('|')[0]}
               alt="포스터"
               width={200}
               height={300}
             />
-          ) : null}
-          <div>
+          ) : (
+            <div className="mx-auto w-[200px] h-[300px] leading-[300px] bg-gray-200">
+              포스터 정보 없음
+            </div>
+          )}
+          {/* <div>
             스틸 이미지:{' '}
             {typeof movie.stillUrl === 'string' &&
             movie.stillUrl.length !== 0 ? (
@@ -60,9 +67,8 @@ export default function MovieShow({ props }: ChildComponentProps) {
                 height={300}
               />
             ) : null}
-          </div>
-          <div>감독: {movie.directors?.map((el) => el.directorNm)}</div>
-          <h2>배우</h2>
+          </div> */}
+          {/* <h2>배우</h2>
           <ul className="flex gap-[10px]">
             {movie.actors?.map((el, key) => (
               <li key={key}>{el.actorNm}</li>
@@ -99,10 +105,11 @@ export default function MovieShow({ props }: ChildComponentProps) {
                 </video>
               ) : null
             )}
-          </div>
+          </div> */}
         </div>
       ))}
       <Pagination
+        className="my-[20px] col-span-4 w-2/4 mx-auto border-none"
         totalPost={totalPost}
         limit={12}
         btnLength={5}
