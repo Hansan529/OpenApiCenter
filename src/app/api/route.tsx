@@ -2,7 +2,7 @@ import { SystemError } from '@/type';
 import { NextRequest, NextResponse } from 'next/server';
 import mysql from 'mysql2/promise';
 
-const config = {
+export const config = {
   host: 'localhost',
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -27,11 +27,12 @@ export async function GET(req: NextRequest) {
         `SELECT * FROM movie`,
         value
       );
+      dbconnection.end();
       return NextResponse.json(results);
     }
 
     const { Data } = await fetch(
-      `${process.env.API_URL}?ServiceKey=${process.env.API_KEY}&createDts=${createDts}&listCount=${listCount}&collection=kmdb_new2&detail=Y&startCount=1124`
+      `${process.env.API_URL}?ServiceKey=${process.env.API_KEY}&createDts=${createDts}&listCount=${listCount}&collection=kmdb_new2&detail=Y&startCount=1000`
     ).then((res) => res.json());
     const result = Data[0].Result;
     result.map(async (movie: any) => {
@@ -51,17 +52,17 @@ export async function GET(req: NextRequest) {
           '${movie.ratings.rating[0].releaseDate.replace(/'/g, '/\\/')}', 
           '${movie.posters.replace(/'/g, '/\\/')}', 
           '${movie.stlls.replace(/'/g, '/\\/')}', 
-          '${JSON.stringify(movie.directors.director).replace(/'/g, "\\'")}', 
-          '${JSON.stringify(movie.actors.actor).replace(
+          '${JSON.stringify(movie.directors).replace(/'/g, "\\'")}', 
+          '${JSON.stringify(movie.actors).replace(
             /'/g,
             "\\'"
-          )}', '${JSON.stringify(movie.staffs.staff).replace(
+          )}', '${JSON.stringify(movie.staffs).replace(
         /'/g,
         "\\'"
-      )}', '${JSON.stringify(movie.plots.plot).replace(
+      )}', '${JSON.stringify(movie.plots).replace(
         /'/g,
         "\\'"
-      )}', '${JSON.stringify(movie.vods.vod).replace(/'/g, "\\'")}'
+      )}', '${JSON.stringify(movie.vods).replace(/'/g, "\\'")}'
           )`;
       const [err, roes, fields] = await dbconnection.query(insertQuery);
     });

@@ -21,7 +21,9 @@ export default function RootLayout({ children }: Props) {
         <ReduxProvider>
           <ThemeProvider>
             <Header />
-            {children}
+            <main className="min-h-screen h-full pt-24 bg-gray-200 dark:bg-gray-800 text-black dark:text-white duration-500">
+              {children}
+            </main>
           </ThemeProvider>
         </ReduxProvider>
       </body>

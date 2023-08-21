@@ -1,7 +1,7 @@
 import NotFound from '@/app/not-found';
 import MovieShow from './MovieShow';
 
-type Slug = {
+export type Slug = {
   params: {
     slug: string;
   };
@@ -27,33 +27,42 @@ export interface Movie {
   posterUrl: string;
   stillUrl: string;
   directors: {
-    directorNm: string;
-  }[];
+    director: {
+      directorNm: string;
+    }[];
+  };
   actors: {
-    actorNm: string;
-  }[];
+    actor: {
+      actorNm: string;
+    }[];
+  };
   staffs: {
-    staffNm: string;
-    staffRoleGroup: string;
-  }[];
+    staff: {
+      staffNm: string;
+      staffRoleGroup: string;
+    }[];
+  };
   plots: {
-    plotText: string;
-  }[];
+    plot: {
+      plotText: string;
+    }[];
+  };
   vods: {
-    vodUrl: string;
-  }[];
+    vod: {
+      vodUrl: string;
+    }[];
+  };
 }
 
 export type MoviePartial = Partial<Movie>;
 
 export default async function Page({ params }: Slug) {
   const year = params.slug;
-  if (year !== '2023') return <NotFound />;
-  const data = await fetchMovie('2023', '1');
+  const data = await fetchMovie('2023', '500');
   const filterList = data.filter((el: MoviePartial) => {
     return (
       el.genre !== '에로' &&
-      el.directors?.length !== 0 &&
+      el.directors?.director.length !== 0 &&
       el.genre?.length !== 0
     );
   });
