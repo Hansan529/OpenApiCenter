@@ -2,12 +2,11 @@ import { SystemError } from '@/type';
 import { NextRequest, NextResponse } from 'next/server';
 import mysql from 'mysql2/promise';
 
-export const config = {
-  host: 'localhost',
+export const mysqlConnect = {
+  host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  socketPath: '/tmp/mysql.sock',
 };
 
 type movieObject = {
@@ -15,14 +14,14 @@ type movieObject = {
 };
 
 export async function GET(req: NextRequest) {
-  const createDts = req.nextUrl.searchParams.get('createDts');
-  const listCount = req.nextUrl.searchParams.get('listCount');
-  const dbconnection: any = await mysql.createConnection(config);
+  const createDts = req.nextUrl.searchParams.get("createDts");
+  const listCount = req.nextUrl.searchParams.get("listCount");
+  const dbconnection: any = await mysql.createConnection(mysqlConnect);
   try {
-    const query = 'SELECT COUNT(*) FROM movie';
+    const query = "SELECT COUNT(*) FROM movie";
     const value: string[] = [];
     const [results] = await dbconnection.execute(query, value);
-    if (Object.values(results[0])[0] === 1123) {
+    if (Object.values(results[0])[0] === 1125) {
       const [results] = await dbconnection.execute(
         `SELECT * FROM movie`,
         value
@@ -40,18 +39,18 @@ export async function GET(req: NextRequest) {
       INSERT INTO movie(
         title, titleEng, titleOrg, prodYear , nation, company, runtime, rating, genre, releaseDate, posterUrl, stillUrl, directors, actors, staffs, plots, vods
         ) values (
-          '${movie.title.replace(/'/g, '/\\/').trim()}', 
-          '${movie.titleEng.replace(/'/g, '/\\/')}', 
-          '${movie.titleOrg.replace(/'/g, '/\\/')}', 
-          '${movie.prodYear.replace(/'/g, '/\\/')}', 
-          '${movie.nation.replace(/'/g, '/\\/')}', 
-          '${movie.company.replace(/'/g, '/\\/')}', 
-          '${movie.runtime.replace(/'/g, '/\\/')}', 
-          '${movie.rating.replace(/'/g, '/\\/')}',
-          '${movie.genre.replace(/'/g, '/\\/')}', 
-          '${movie.ratings.rating[0].releaseDate.replace(/'/g, '/\\/')}', 
-          '${movie.posters.replace(/'/g, '/\\/')}', 
-          '${movie.stlls.replace(/'/g, '/\\/')}', 
+          '${movie.title.replace(/'/g, "/\\/").trim()}', 
+          '${movie.titleEng.replace(/'/g, "/\\/")}', 
+          '${movie.titleOrg.replace(/'/g, "/\\/")}', 
+          '${movie.prodYear.replace(/'/g, "/\\/")}', 
+          '${movie.nation.replace(/'/g, "/\\/")}', 
+          '${movie.company.replace(/'/g, "/\\/")}', 
+          '${movie.runtime.replace(/'/g, "/\\/")}', 
+          '${movie.rating.replace(/'/g, "/\\/")}',
+          '${movie.genre.replace(/'/g, "/\\/")}', 
+          '${movie.ratings.rating[0].releaseDate.replace(/'/g, "/\\/")}', 
+          '${movie.posters.replace(/'/g, "/\\/")}', 
+          '${movie.stlls.replace(/'/g, "/\\/")}', 
           '${JSON.stringify(movie.directors).replace(/'/g, "\\'")}', 
           '${JSON.stringify(movie.actors).replace(
             /'/g,

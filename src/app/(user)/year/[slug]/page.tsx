@@ -9,7 +9,8 @@ export type Slug = {
 
 const fetchMovie = async (createDts: string, listCount: string) => {
   const res = await fetch(
-    `http://localhost:3000/api?createDts=${createDts}&listCount=${listCount}`
+    `https://movie.hxan.net/api?createDts=${createDts}&listCount=${listCount}`,
+    { cache: "no-cache" }
   );
   return res.json();
 };

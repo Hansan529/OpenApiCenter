@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  web:
+    image: hxan_movie
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        ENV_VARIABLE: ${ENV_VARIABLE}
+        NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
+    restart: always
+    environment:
+      - API_URL=${API_URL}
+      - API_KEY=${API_KEY}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}

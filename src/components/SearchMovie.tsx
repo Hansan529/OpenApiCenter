@@ -11,7 +11,7 @@ export default function SearchMovie(movie: MoviePartial) {
   const searchFnc = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = await fetch(
-      `http://localhost:3000/api/search?title=${search}`
+      `https://movie.hxan.net/api/search?title=${search}`
     ).then((res) => res.json());
     const filterList = data.filter((el: MoviePartial) => {
       return (

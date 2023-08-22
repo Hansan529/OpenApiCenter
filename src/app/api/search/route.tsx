@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { config } from '../route';
-import mysql from 'mysql2/promise';
-import { SystemError } from '@/type';
+import { mysqlConnect } from "../route";
+import mysql from "mysql2/promise";
+import { SystemError } from "@/type";
 
 export async function GET(req: NextRequest) {
-  const title = req.nextUrl.searchParams.get('title');
-  const dbconnection: any = await mysql.createConnection(config);
+  const title = req.nextUrl.searchParams.get("title");
+  const dbconnection: any = await mysql.createConnection(mysqlConnect);
   try {
     const query = `SELECT * FROM movie WHERE title = '${title}'`;
     const value: string[] = [];
